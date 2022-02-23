@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>SIMPLE-THE GROUP</title>
+        <!-- Icon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+        <link rel="manifest" href="./site.webmanifest">
+
+        <meta charset = 'UTF-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        <!-- Stylesheet -->
+        <link rel="stylesheet" href='./css/main.css'>
+
+        <!--CDN-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- Font import -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+        <!-- Threejs -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>        
+        
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        
+        <!-- Libs import -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/giojs@2.2.1/build/gio.min.js"></script>
+        
+        <script type='module' src="https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/EXRLoader.js"></script>
+    </head>
+    
+    <body>
+        <div class='helper-gui'></div>
+        <div class='gui'></div>
+        <div id='auxiliary'></div>
+        <div id='webgl' class='w-100 h-100 position-fixed'>
+            <script type='module' src='./index.js'></script>
+        </div>
+        <div id='side' class='wrapper d-flex align-items-stretch noselect'>
+            <nav id='sidebar'>
+                <div class='custom-menu'>
+                    <!-- <button id='sidebarCollapse' class='btn btn-dark'>
+                        <i class='fa fa-bars'></i>
+                        <span class='sr-only'>Open Menu</span>
+                    </button> -->
+                </div>
+                <div class='p-4 pt-5'>
+                    <ul class='list-unstyled components mb-5'> 
+                        <li data-toggle="collapse" aria-expanded="false" id='obj-control'>
+                            
+                        </li>
+                        <li data-toggle="collapse" aria-expanded="false">
+                            <button class='rm-button' onClick="removeGeometry('all')">Reset scene</button>
+                        </li>
+                        <li data-toggle="collapse" aria-expanded="false">
+                            <input type='checkbox'  id='plane' value='plane' name='plane' onchange="displayPlane()"/>
+                            <label for='plane'>Plane</label>
+                            <input type='file' accept="image/*" id='texture-plane' style='display:none;' onChange="setTexture(window.URL.createObjectURL(this.files[0]),'plane')"/> 
+                            <div class='plane-texture' onClick='uploadImage("texture-plane")'>Set Plane Texture</div>
+                        </li>
+                        <li data-toggle="collapse" aria-expanded="false">
+                            <input type='checkbox' id='ambient' value='ambient' name='ambient' onchange="displayAmbient()"/>
+                            <label for='ambient'>Ambient Light</label>
+                        </li>
+                        <li>
+                            <a href='#backgroundSubmenu' data-toggle='collapse' aria-expanded="false"
+                                class='dropdown-toggle'>Background</a>
+                            <ul class='collapse list-unstyled' id='backgroundSubmenu'>
+                                <li>
+                                   <label for='bg-color'>Color</label> 
+                                   <input type='color' id='bg-color' name='bg-color' onchange="setBGColor(this.value)"/>
+                                </li>
+                                <li>
+                                    <a href='#' onclick='uploadImage("bg-texture")'>Texture</a>
+                                    <input type='file' accept="image/*" id='bg-texture' style='display:none;' onChange="setTexture(window.URL.createObjectURL(this.files[0]),'background')"/> 
+                                 </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+                                class="dropdown-toggle">Geometry</a>
+                            <ul class="collapse list-unstyled" id="homeSubmenu">
+                                <li>
+                                    <a href="#" onclick="renderGeometry('box');">Cube</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('sphere');">Sphere</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('cone');">Cone</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('cylinder');">Cylinder</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('torus');">Torus</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('tea-pot');">Teapot</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('icosa');">Icosahedron</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('dode');">Dodecahedron</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('octa');">Octahedron</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('tetra');">Tetrahedron</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="renderGeometry('circle');">Circle</a>
+                                </li>
+                                <li>
+                                    <label for='insertedText'>Text Geometry</label>
+                                    <br>
+                                    <input type='text' id='insertedText' /> <button class='dark' onclick="renderGeometry('text');">Create</button>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="uploadGeometry('geometry_loader')">Load new Geometry</a>
+                                    <input type='file' id='geometry_loader' style='display:none;' onChange="setLoaderGeometry(window.URL.createObjectURL(this.files[0]))"/>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                                class="dropdown-toggle">Surface</a>
+                            <ul class="collapse list-unstyled" id="pageSubmenu">
+                                <li>
+                                    <a href="#" onclick="setMaterial('standard');">Standard</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="setMaterial('point');">Point</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="setMaterial('wireframe');">Wireframe</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="setMaterial('basic');">Solid</a>
+                                </li>
+                                <li>
+                                    <a href="#" onClick='uploadImage("texture-obj");'>Special Texture</a>     
+                                    <input type='file' accept="image/*" id='texture-obj' style='display:none;' onChange="setTexture(window.URL.createObjectURL(this.files[0]))"/> 
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#lightSubmenu" data-toggle="collapse" aria-expanded="false"
+                                class="dropdown-toggle">Light</a>
+                            <ul class="collapse list-unstyled" id="lightSubmenu">
+                                <li>
+                                    <a href="#" onclick="setPointLight()">Point Light</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="setSpotLight()">Spot Light</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="removeLight()">Remove Light</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#animationSubmenu" data-toggle="collapse" aria-expanded="false"
+                                class="dropdown-toggle">Animation</a>
+                            <ul class="collapse list-unstyled" id="animationSubmenu">
+                                <li>
+                                    <input type="checkbox" value="ani1" name='ani1' id="ani1" onChange="initBasicAnimation()">
+                                    <label for="anim1" onClick="document.getElementById('ani1').click()">Animation 1: rotate x</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" value="ani2" name='ani2' id="ani2" onChange="initBasicAnimation()">
+                                    <label for="anim2" onClick="document.getElementById('ani2').click()">Animation 2: rotate y</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" value="ani3" name='ani3' id="ani3" onChange="initBasicAnimation()">
+                                    <label for="anim3" onClick="document.getElementById('ani3').click()">Animation 3: rotate z</label>
+                                </li>
+                                <li>
+                                    <a href="#" class='no-decoration' onclick="Animation3()">Animation 4: Floating</a>
+                                </li>
+                                <li>
+                                    <a href="#" class='no-decoration' onclick="Animation4()">Animation 5: Going in Round</a>
+                                </li>
+                                <li>
+                                    <a href="#" class='no-decoration' onclick="Animation5()">Animation 6: Going Zic Zac</a>
+                                </li>
+                                <li>
+                                    <a href="#" class='no-decoration' onclick="removeAnimation()">Remove Animation</a>
+                                </li>
+                                <li id='empty-span-animation'>
+                                    <div>
+                                        <label for='amplitude' id='label_amplitude' style='display:none'>Amplitude</label>
+                                    
+                                        <input type='range' id='amplitude' onChange = "setAmplitude(this.value)" style="display:none"
+                                        min = '0' max = '1000' value='500' oninput="outAmplitude.value = amplitude.value"/>
+                                        <output name="outAmplitude" id='outAmplitude' style='display:none'>500</output>
+                                    </div>
+                                    <div>
+                                        <label for='x' id='label_x' style='display:none'>X</label>
+
+                                        <input type='range' id='x' onChange = "setX(this.value)" style="display:none"
+                                            min = '0' max = '0.7' value='0.01' step="0.01" oninput="outx.value = x.value"/>
+                                        <output name="outx" id='outx' style='display:none'>0.01</output>
+                                    </div>
+
+                                    <div>
+                                        <label for='y' id='label_y' style='display:none'>Y</label>
+
+                                        <input type='range' id='y' onChange = "setY(this.value)" style="display:none"
+                                            min = '0' max = '0.7' value='0.01' step="0.01" oninput="outy.value = y.value"/>
+                                        <output name="outy" id='outy' style='display:none'>0.01</output>
+                                    </div>
+
+                                    <div>
+                                        <label for='z' id='label_z' style='display:none'>Z</label>
+
+                                        <input type='range' id='z' onChange = "setZ(this.value)" style="display:none"
+                                            min = '0' max = '0.7' value='0.01' step="0.01" oninput="outz.value = z.value"/>
+                                        <output name="outz" id='outz' style='display:none'>0.01</output>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <input id='metalTexture' type='file' style="visibility:hidden"/>
+    </body>
+</html>
